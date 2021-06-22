@@ -17,7 +17,7 @@ export default function ordeFetchReducer(state = initialState, action) {
         case FETCH_ORDER_REQUEST: {
             return {
                 ...state,
-                loading: true,
+                loading: true
             }
         }
         case FETCH_ORDER_FAILURE: {
@@ -37,9 +37,8 @@ export default function ordeFetchReducer(state = initialState, action) {
             }
         }
         case SET_INITIAL_ORDER_STATE: {
-            return {
-                initialState
-            }
+            state = initialState
+            return state
         }
         default:
             return state

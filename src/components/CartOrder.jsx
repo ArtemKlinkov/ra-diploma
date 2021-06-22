@@ -1,6 +1,6 @@
-import { Fragment, useState } from "react"
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Fragment, useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useHistory } from "react-router-dom"
 import { changeFormValue, clearCart, clearFormValues, fetchOrder, setInitialOrderState } from "../actions/actionCreators"
 import { Preloader } from "./Preloader"
 import ReloadBtn from "./ReloadBtn"
@@ -10,8 +10,7 @@ export default function CartOrder() {
     const dispatch = useDispatch()
     const state = useSelector(state => state.orderFormReducer)
     const { items } = useSelector(state => state.cartReducer)
-    const { loading, error, success } = useSelector(state => state.orderFetchReducer)
-    const history = useHistory();
+    let { loading, error, success } = useSelector(state => state.orderFetchReducer)
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -33,6 +32,17 @@ export default function CartOrder() {
         dispatch(changeFormValue(e.target.name, e.target.value))
     }
 
+    useEffect(() => {
+        dispatch(setInitialOrderState())        
+      }, []);
+
+    useEffect(() => {
+        if (success) {
+            dispatch(clearFormValues())
+            dispatch(clearCart())            
+        }
+      }, [success]);
+
     if (loading) {
         return (
             <Preloader />
@@ -46,10 +56,11 @@ export default function CartOrder() {
     }
 
     if (success) {
-        dispatch(clearFormValues())
-        dispatch(clearCart())
-        dispatch(setInitialOrderState())
-        history.push('/')
+        return (
+            <section className="order">
+                <h2 className="text-center">Ваш заказ успешно оформлен.</h2>
+            </section>
+        );       
     }
 
     return (

@@ -1,10 +1,10 @@
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { changeValue, fetchFilterItems } from "../../../actions/actionCreators";
 
 export default function Search() {
-
+    const [isShow, setShow] = useState(false)
     const { value } = useSelector(state => state.changeValueReducer)
     const { activeCategory } = useSelector(state => state.categoriesReducer)
     const dispatch = useDispatch()
@@ -22,7 +22,7 @@ export default function Search() {
     }
 
     const handleClick = () => {
-        searchInput.current.classList.toggle('invisible')
+        setShow(!isShow)
         searchInput.current.focus()
     }
     const searchInput = useRef()
@@ -33,7 +33,7 @@ export default function Search() {
                 redirect ? <Redirect to="/catalog" /> :
                     <Fragment>
                         <div onClick={handleClick} data-id="search-expander" className="header-controls-pic header-controls-search"></div>
-                        <form onSubmit={handleSubmit} ref={searchInput} data-id="search-form" className="header-controls-search-form form-inline invisible">
+                        <form onSubmit={handleSubmit} ref={searchInput} data-id="search-form" className={"header-controls-search-form form-inline " + (isShow ? '' : 'invisible')}>
                             <input onChange={handleChange} value={value} className="form-control" name="search" placeholder="Поиск" />
                         </form>
                     </Fragment>
