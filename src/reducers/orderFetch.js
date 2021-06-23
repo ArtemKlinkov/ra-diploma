@@ -37,8 +37,7 @@ export default function ordeFetchReducer(state = initialState, action) {
             }
         }
         case SET_INITIAL_ORDER_STATE: {
-            state = initialState
-            return state
+            return initialState
         }
         default:
             return state
